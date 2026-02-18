@@ -32,6 +32,7 @@ export default function Login() {
           height={100}
           className="mx-auto mb-4"
         />
+        <h1 className="text-2xl font-bold text-center mb-6">Smart Bookmarks</h1>
         <button
           onClick={handleLogin}
           className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
