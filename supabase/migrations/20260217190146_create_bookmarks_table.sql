@@ -16,16 +16,16 @@ alter table public.bookmarks enable row level security;
 
 -- policies
 create policy "Users can view their own bookmarks" on public.bookmarks
-  for select using (auth.uid() = user_id);
+  for select using ( select (auth.uid()) = user_id);
 
 create policy "Users can insert their own bookmarks" on public.bookmarks
-  for insert with check (auth.uid() = user_id);
+  for insert with check ( select (auth.uid()) = user_id);
 
 create policy "Users can update their own bookmarks" on public.bookmarks
-  for update using (auth.uid() = user_id);
+  for update using ( select (auth.uid()) = user_id);
 
 create policy "Users can delete their own bookmarks" on public.bookmarks
-  for delete using (auth.uid() = user_id);
+  for delete using ( select (auth.uid()) = user_id);
 
 -- enable realtime
 alter publication supabase_realtime add table public.bookmarks;
