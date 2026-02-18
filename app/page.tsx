@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { bookmark } from "@/lib/types";
 import { fetchBookmarks } from "@/lib/supabase/queries/bookmarks";
@@ -110,8 +110,7 @@ export default function Home() {
           <h1 className="text-3xl font-bold">My Bookmarks</h1>
           <button
             onClick={() => {
-              localStorage.removeItem("user");
-              window.location.href = "/login";
+              handleLogout();
             }}
             className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
           >
@@ -120,7 +119,7 @@ export default function Home() {
         </div>
 
         <form
-          onSubmit={() => {}}
+          onSubmit={handleAddBookmark}
           className="bg-white p-6 rounded-lg shadow-md mb-6"
         >
           <div className="mb-4">
@@ -169,7 +168,7 @@ export default function Home() {
                 </a>
               </div>
               <button
-                onClick={() => {}}
+                onClick={() => handleDelete(bookmark.id)}
                 className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 ml-4"
               >
                 Delete

@@ -2,18 +2,16 @@
 
 import { createClient } from "@/lib/supabase/client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Logo from "../../public/bookmark.png";
 
 export default function Login() {
-  const router = useRouter();
   const supabase = createClient();
 
   const handleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo: `${location.origin}`,
       },
     });
 
