@@ -5,7 +5,13 @@ import type { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { bookmark } from "@/lib/types";
-import { fetchBookmarks } from "@/lib/supabase/queries/bookmarks";
+import {
+  addBookmark,
+  deleteBookmark,
+  fetchBookmarks,
+} from "@/lib/supabase/queries/bookmarks";
+import Image from "next/image";
+import Logo from "../public/bookmark.png";
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
@@ -79,15 +85,20 @@ export default function Home() {
     e.preventDefault();
     if (!url || !title) return;
 
-    await supabase
-      .from("bookmarks")
-      .insert([{ url, title, user_id: user?.id }]);
+    addBookmark({ url, title, user_id: user?.id }).then((data) => {
+      if (data) {
+        setBookmarks((prev) => [data, ...prev]);
+      }
+    });
+
     setUrl("");
     setTitle("");
   };
 
   const handleDelete = async (id: string) => {
-    await supabase.from("bookmarks").delete().eq("id", id);
+    deleteBookmark(id).then(() => {
+      setBookmarks((prev) => prev.filter((b) => b.id !== id));
+    });
   };
 
   const handleLogout = async () => {
@@ -107,7 +118,15 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">My Bookmarks</h1>
+          <div className="flex flex-row items-center space-x-2">
+            <Image
+              src={Logo}
+              alt="Smart Bookmarks Logo"
+              width={70}
+              height={70}
+            />
+            <h1 className="text-3xl font-bold">My Bookmarks</h1>
+          </div>
           <button
             onClick={() => {
               handleLogout();
